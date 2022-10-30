@@ -16,7 +16,7 @@ async function getContactById(contactId) {
   try {
     const contacts = await fs.readFile(contactsPath);
     const contact = JSON.parse(contacts).filter(
-      (item) => +item.id === contactId
+      (item) => item.id.toString() === contactId.toString()
     );
     return contact;
   } catch (error) {
@@ -29,7 +29,7 @@ async function removeContact(contactId) {
     const contacts = await fs.readFile(contactsPath);
     const parsedContacts = JSON.parse(contacts);
     const restContacts = parsedContacts.filter(
-      (item) => +item.id !== contactId
+      (item) => item.id.toString() !== contactId.toString()
     );
     fs.writeFile(contactsPath, JSON.stringify(restContacts));
     return restContacts;
@@ -42,7 +42,7 @@ async function addContact(name, email, phone) {
   try {
     const contacts = await fs.readFile(contactsPath);
     const parsedContacts = JSON.parse(contacts);
-    const id = parsedContacts.length + 1;
+    const id = Date.now();
     const newContact = {
       id: id.toString(),
       name,
